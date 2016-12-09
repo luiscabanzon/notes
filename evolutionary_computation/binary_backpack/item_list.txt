@@ -1,0 +1,7 @@
+knive 30 20
+laptop 50 50
+bottle 20 10
+book 40 30
+notebook 30 20
+charger 20 5
+battery 15 20 
