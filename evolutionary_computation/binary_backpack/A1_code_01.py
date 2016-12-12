@@ -1,14 +1,20 @@
+# -*- coding: utf-8 -*-
+__author__ = 'Luis Cabanzón'
+
 from random import choice, sample, uniform
 
 def load_items(file):
     item_list = []
     f = open(file).readlines()
     for line in f:
-        item_list.append(line.split())
-    item_list = sorted(item_list, key=lambda x: float(x[1]) / float(x[2]), reverse=True)
+        item = dict()
+        item['value'] = float(line[0])
+        item['weight'] = float(line[1])
+        item_list.append(item)
+    item_list = sorted(item_list, key=lambda x: x['value'] / x['weight'], reverse=True)
     return item_list
 
-items = load_items('item_list.txt')
+items = load_items('item_list_2.txt')
 
 def random_solution(n_genes):
     solution = []
@@ -22,14 +28,14 @@ def fitness(solution, ref_list, backpack_capacity):
     total_weight = 0
     for i in range(len(solution)):
         gene = solution[i]
-        weight = float(ref_list[i][2])
+        weight = float(ref_list[i]['weight'])
         total_weight += weight * gene
         # print(total_weight)
 
         if total_weight > backpack_capacity:
             return fitness_score
 
-        value = float(ref_list[i][1])
+        value = float(ref_list[i]['value'])
         fitness_score += gene * (value / weight)
     return fitness_score
 
@@ -135,5 +141,7 @@ for R in range(100):
 	print("Generation %s. Avg. Score: %s" % (R, evaluate_population(population, fitness, items, 100)))
 	#performance.append(evaluate_population(population, fitness, items, 100))
 
+best_solution = sorted(new_population, key=lambda x: fitness(x, items, 100), reverse=True)[0]
+print "Best Solution: %s" % best_solution
 #for p in performance:
 	# print p
