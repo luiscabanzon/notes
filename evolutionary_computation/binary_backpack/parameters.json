@@ -1,0 +1,13 @@
+{
+	"_comment_": "item_list_size can be either 'big' or 'small'",
+	"_comment2_": "for a small item_list_size, set the population_size to 10, and 100 for the big one",
+	"item_list_size": "big",
+	"sort_items": true,
+	"iterations": 20,
+	"population_size": 100,
+	"backpack_capacity": 50,
+	"crossover_rate": 0.5,
+	"tournament_size": 2,
+	"choose_fittest":1,
+	"tournament_size": 2
+}
