@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-__author__ = 'Luis Cabanzón'
-
 from random import choice, sample, uniform
 import json
+
+__author__ = 'Luis Cabanzón'
 
 
 def create_item_list(size, sort_items=True):
@@ -109,7 +109,7 @@ population = create_population(100, random_solution, items['list_size'])
 
 performance = []
 for R in range(params['iterations']):
-    new_population = tournament_selector(population, params['population_size'], fitness, tournament_size=params['tournament_size'])
+    new_population = tournament_selector(population, params['population_size'], fitness)
     parents_A = new_population[:int(len(new_population) / 2)]
     parents_B = new_population[int(len(new_population) / 2):]
     children = []
