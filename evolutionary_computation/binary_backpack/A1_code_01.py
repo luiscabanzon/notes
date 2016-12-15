@@ -56,22 +56,27 @@ def fitness(solution, ref_list):
 
 
 def tournament_selector(population, n_selections, fitness_function,
-                        tournament_size=2, choose_fittest=1):
+                        params, item_list):
     # Selects K solutions from the population, using the tournament technique
     pop_index = list(range(len(population)))
     selected_solutions = []
 
     for i in range(n_selections):
-        candidates = [population[e] for e in sample(pop_index, tournament_size)]
-        sorted_candidates = sorted(candidates, key=lambda x: fitness_function(x, items), reverse=True)
+        candidates = [population[e] for e in sample(pop_index, params['tournament_size'])]
+        sorted_candidates = sorted(candidates, key=lambda x: fitness_function(x, item_list), reverse=True)
         winner = False
+        # Iterate through sorted candidates and select a winner
+        # normally it's the first one, but probability ratio can be modified ('choose_fittest' parameter)
         for j in sorted_candidates:
-            if uniform(0, 1) <= choose_fittest:
+            if uniform(0, 1) <= params['choose_fittest']:
                 winner = j
                 break
         if not winner:
             winner = sorted_candidates[-1]
         selected_solutions.append(winner)
+        # Remove winner from population and add a replacement
+        population.remove(winner)
+        population.append(random_solution(items['list_size']))
     return selected_solutions
 
 
@@ -105,22 +110,21 @@ def evaluate_population(population, fitness_function, items):
 
 params = json.loads(open('parameters.json', 'r').read())
 items = create_item_list(params['item_list_size'], params['sort_items'])
-population = create_population(100, random_solution, items['list_size'])
+population = create_population(params['population_size'], random_solution, items['list_size'])
 
 performance = []
 for R in range(params['iterations']):
-    new_population = tournament_selector(population, params['population_size'], fitness)
+    new_population = tournament_selector(population, params['population_size'], fitness, params, items)
     parents_A = new_population[:int(len(new_population) / 2)]
     parents_B = new_population[int(len(new_population) / 2):]
     children = []
     for p in range(len(parents_A) - 1):
         children += onepoint_crossover(parents_A[p], parents_B[p], params['crossover_rate'])
     mutated_children = [mutate(child, 1.0/len(items['items'])) for child in children]
-    best_solution = sorted(new_population, key=lambda x: fitness(x, items), reverse=True)[0]
+    best_solution = sorted(new_population + population, key=lambda x: fitness(x, items), reverse=True)[0]
     population = mutated_children + [best_solution]
-    # print len(population)
-    # print population
-    score = evaluate_population(population, fitness, items)
+    score = fitness(best_solution, items)
+    #score = evaluate_population(population, fitness, items)
     print("Generation %s. Avg. Score: %s" % (R, score))
     print "Best Solution (Gen. %s): %s" % (R, best_solution)
     performance.append(score)

@@ -7,6 +7,5 @@
 	"population_size": 10,
 	"crossover_rate": 0.5,
 	"tournament_size": 2,
-	"choose_fittest":1,
-	"tournament_size": 2
+	"choose_fittest": 1
 }
