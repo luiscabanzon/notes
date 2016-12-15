@@ -3,7 +3,7 @@
 	"_comment2_": "for a small item_list_size, set the population_size to 10, and 100 for the big one",
 	"item_list_size": "small",
 	"sort_items": true,
-	"iterations": 100,
+	"iterations": 50,
 	"population_size": 10,
 	"crossover_rate": 0.5,
 	"tournament_size": 2,
